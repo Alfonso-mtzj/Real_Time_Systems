@@ -13,7 +13,14 @@ Putting an ISR close to the processor matters because external flash is reached 
 
 ## Part B 
 
+https://wokwi.com/projects/465309953489601537
 
+AI Disclosure
+
+ChatGPT was used to help explain and verify the following concepts:
+
+Bit-field syntax and 16-bit layout
+Volatile and MMIO behavior
 
 ## Part C
 
