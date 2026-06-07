@@ -195,10 +195,9 @@ A[RideSensorTask]
 B[DispatchControlTask]
 C[OperatorDisplayTask]
 
-D[(Ride Status Mutex)]
+D[(rideStatus Mutex)]
 
 A --> D
-B --> D
 C --> D
 ```
 
