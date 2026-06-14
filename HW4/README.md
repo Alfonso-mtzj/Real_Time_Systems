@@ -1,7 +1,7 @@
-# Real-Time Scheduling Assignment — Liu & Layland + RTA Analysis
+# Real-Time Scheduling Assignment — RMS / EDF / RTA
 
 ## Overview
-This assignment applies real-time scheduling theory (RMS + EDF) using Liu & Layland utilization bounds and Response Time Analysis (RTA). The goal is to determine whether different task sets are schedulable and justify it mathematically.
+This assignment uses Liu & Layland utilization tests and Response Time Analysis (RTA) to check if different task sets are schedulable under RMS and EDF.
 
 ---
 
@@ -14,147 +14,129 @@ Tasks:
 - τ₃ (T=100, C=20)
 
 Utilization:
-- U₁ = 2/10 = 0.20  
-- U₂ = 5/25 = 0.20  
-- U₃ = 20/100 = 0.20  
+- 2/10 = 0.2  
+- 5/25 = 0.2  
+- 20/100 = 0.2  
 
-Total:
-- **U = 0.60**
+Total U = 0.6  
 
 RMS bound (n=3):
-- U_LL ≈ 0.78
+≈ 0.78  
 
-Result:
-- 0.60 < 0.78 → **RMS guaranteed schedulable**
-- EDF: 0.60 ≤ 1 → **Schedulable**
+So:
+- 0.6 < 0.78 → RMS is guaranteed schedulable  
+- EDF: 0.6 ≤ 1 → schedulable  
 
 ---
 
 ## Set 2
-- U = 0.25 + 0.333 + 0.30 ≈ **0.883**
+U = 0.25 + 0.333 + 0.3 ≈ 0.883  
 
-RMS bound (n=3):
-- U_LL ≈ 0.78
+RMS bound (n=3) ≈ 0.78  
 
-Result:
-- 0.883 > 0.78 → **RMS not guaranteed**
-- EDF: 0.883 ≤ 1 → **Schedulable**
+- 0.883 > 0.78 → not guaranteed under RMS  
+- EDF still works since U ≤ 1  
 
 ---
 
 ## Set 3
-All tasks have U = 0.2:
+Each task is 0.2 utilization:
 
-Total:
-- **U = 0.80**
+Total U = 0.8  
 
-RMS bound (n=4):
-- U_LL ≈ 0.756
+RMS bound (n=4) ≈ 0.756  
 
-Result:
-- 0.80 > 0.756 → **Not guaranteed under RMS bound**
-- EDF: 0.80 ≤ 1 → **Schedulable**
+- 0.8 > 0.756 → not guaranteed  
+- EDF: still schedulable (U ≤ 1)
 
 ---
 
 # Part B — Response Time Analysis (Set 1)
 
-Priority order (RMS):
-τ₁ → τ₂ → τ₃
+Priority order (RMS): τ₁ → τ₂ → τ₃
 
 ---
 
 ## τ₁
 R₁ = C₁ = 2  
-Deadline = 10 → **OK**
+Deadline = 10 → fine
 
 ---
 
 ## τ₂
 Higher priority: τ₁
 
-Iterations:
-- R₂⁰ = 5  
-- R₂¹ = 5 + ⌈5/10⌉·2 = 7  
-- R₂² = 7 (converged)
+Start:
+- R₂ = 5  
+- R₂ = 5 + ⌈5/10⌉·2 = 7  
+- R₂ stays 7 after that  
 
-R₂ = 7 ≤ 25 → **OK**
+So R₂ = 7 ≤ 25 → OK
 
 ---
 
 ## τ₃
 Higher priority: τ₁, τ₂
 
-Iterations:
-- R₃⁰ = 20  
-- R₃¹ = 29  
-- R₃² = 36  
-- R₃³ = 38  
-- R₃⁴ = 38 (converged)
+Start:
+- R₃ = 20  
+- R₃ = 29  
+- R₃ = 36  
+- R₃ = 38  
+- stabilizes at 38  
 
-R₃ = 38 ≤ 100 → **OK**
-
----
-
-## Part B Result
-All tasks meet deadlines → **Set 1 is RMS schedulable using RTA**
+So R₃ = 38 ≤ 100 → OK
 
 ---
 
-# Part C — Failure Scenario (Set 3 modified)
+# Part C — Failure Scenario (Set 3, C₄ changed)
 
-Change:
-- C₄ = 25 ms (instead of 10 ms)
+Now C₄ = 25 ms
 
----
+## Utilization
+U = 0.2 + 0.2 + 0.2 + 0.5 = 1.1  
 
-## New Utilization
-U = 0.2 + 0.2 + 0.2 + 0.5 = **1.1**
-
-Result:
-- U > 1 → **Not schedulable (even EDF fails)**
-- RMS bound already fails
+So:
+- U > 1 → not schedulable at all (EDF or RMS)
 
 ---
 
-## RTA Check (τ₁ and τ₂)
+## RTA check (τ₁ and τ₂ only)
 
 ### τ₁
-R₁ = 1 → **feasible**
+R₁ = 1 → meets deadline
 
 ### τ₂
-- R₂⁰ = 2 + ⌈2/5⌉·1 = 3  
-- R₂¹ = 3 (converged)
+- R₂ = 2 + ⌈2/5⌉·1 = 3  
+- stable at 3  
 
-R₂ = 3 ≤ 10 → **feasible**
-
----
-
-## Observation
-Even though the whole system fails, τ₁ and τ₂ still meet deadlines because the lowest priority task (τ₄) is what causes overload.
+So τ₂ is still fine
 
 ---
 
-## Design Fixes (no hardware changes)
+## What this means
+Even though the full system fails, the higher priority tasks still meet deadlines because the overload is caused by τ₄.
 
-### 1. Reduce execution time of τ₄
-- Example: C₄ from 25 → 15 ms  
-- Lowers total CPU usage  
-- Helps bring system back under schedulable range
+---
 
-### 2. Increase period of τ₄
-- Example: T₄ from 50 → 80+ ms  
-- Reduces how often heavy task runs  
-- Common real-time tradeoff: slower updates for stability
+## Fixes (no hardware changes)
+
+1. Reduce C₄  
+   - like from 25 → 15 ms  
+   - lowers total CPU usage
+
+2. Increase T₄  
+   - like 50 → 80 or 100 ms  
+   - makes it run less often so system load drops
 
 ---
 
 # Part D — Industry Use (AUTOSAR / DO-178C)
 
-In real systems like automotive (AUTOSAR) or avionics (DO-178C), scheduling is proven using formal analysis, not guessing.
+In real systems like AUTOSAR or avionics (DO-178C), scheduling is proven using tools like Simulink or timing analysis tools (like Rapita).
 
-Engineers use tools like **Simulink** or timing analysis tools (like Rapita) to calculate WCET and Response Time Analysis (RTA). These results are included in certification documents that are reviewed by safety authorities.
+They calculate WCET and run response time analysis to prove all deadlines are met. This gets included in certification documents that are reviewed by safety authorities.
 
-Tasks are assigned fixed priorities, and every deadline must be mathematically proven to meet timing constraints. If RTA shows a deadline miss, the system design must be changed (like reducing execution time or adjusting task periods) before it can be certified.
+If RTA shows a deadline miss, they don’t ignore it — they have to change task timing, execution time, or system design until it passes.
 
-In safety-critical systems, “it seems like it works” is never enough — everything must be proven with analysis and documentation.
+Basically, it has to be mathematically proven, not just “it seems fine in testing.”
