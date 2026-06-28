@@ -212,11 +212,3 @@ The waveform was used to measure interrupt response time and bottom-half wake-up
 
 ChatGPT was used to explain ESP-IDF interrupt concepts, review code, and assist with documentation formatting. All implementation, measurements, testing, latency values, and analysis were completed by the author.
 
----
-
-# Files Included
-
-- `main.c`
-- `diagram.json`
-- `README.md`
-- `<<<LOGIC_ANALYZER_SCREENSHOT.png>>>`
