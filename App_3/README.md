@@ -10,7 +10,7 @@ This project extends my ThemePark real-time system by adding a hardware interrup
 
 # Wokwi Project
 
-<<<PASTE YOUR WOKWI LINK HERE>>>
+(https://wokwi.com/projects/467833675279334401)
 
 ---
 
@@ -152,40 +152,52 @@ The bottom-half task executed later than normal, producing higher latency. After
 
 # Concurrency Diagram
 
-<<<INSERT YOUR CONCURRENCY DIAGRAM IMAGE HERE>>>
-
-or
-
 ```text
-          GPIO18 Button
-                │
-                ▼
-       ISR (IRAM_ATTR)
-                │
-      ┌─────────┴─────────┐
-      │                   │
- Binary Semaphore   Direct Notification
-      │                   │
-      ▼                   ▼
- Bottom-half Task   Bottom-half Task
-     Priority 12      Priority 12
-            │
-            ▼
- ThemePark Ride Control Logs
+                    ThemePark Ride Safety System
 
-WITH_LOAD = 1
+                 GPIO 18 Button Press
+                         │
+                         ▼
+                +------------------+
+                |   ISR (IRAM_ATTR)|
+                |------------------|
+                | Debounce         |
+                | Record timestamp |
+                | Toggle GPIO 19   |
+                | Give semaphore   |
+                | Notify task      |
+                | portYIELD_FROM_ISR() |
+                +------------------+
+                     │         │
+                     │         │
+        Binary Semaphore   Direct Notification
+                     │         │
+                     ▼         ▼
+          +----------------+  +----------------+
+          | Bottom-Half    |  | Bottom-Half    |
+          | Semaphore Task |  | Notification   |
+          | Priority 12    |  | Task           |
+          | Core 1         |  | Priority 12    |
+          +----------------+  | Core 1         |
+                     │         +----------------+
+                     └──────────────┬───────────┘
+                                    │
+                                    ▼
+                     ThemePark Ride Control Logs
 
-Load Task A (Priority 15)
-Load Task B (Priority 10)
-Load Task C (Priority 5)
-Load Task D (Priority 2)
+               (WITH_LOAD = 1 Background Tasks)
+
+        +-------------------------------------------+
+        | Load Task A | Priority 15 | Core 1        |
+        | Load Task B | Priority 10 | Core 1        |
+        | Load Task C | Priority  5 | Core 1        |
+        | Load Task D | Priority  2 | Core 1        |
+        +-------------------------------------------+
 ```
-
----
 
 # Logic Analyzer
 
-<<<INSERT YOUR LOGIC ANALYZER SCREENSHOT HERE>>>
+<img width="1260" height="1207" alt="logic_analyzer" src="https://github.com/user-attachments/assets/cce48f09-f1d3-4a1c-b0d5-c10a5f063675" />
 
 The logic analyzer was connected as follows:
 
