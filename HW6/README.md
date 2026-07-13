@@ -111,7 +111,7 @@ void worker(void *p) {
 
 ### 1. ISR signals a task that one button press happened
 
-**Primitive:** Direct task notification
+Direct task notification
 
 **Why:** It is the fastest and lightest way for an ISR to wake a single task.
 
@@ -119,7 +119,7 @@ void worker(void *p) {
 
 ### 2. A single global integer that Core 0 task and Core 1 task both increment
 
-**Primitive:** Atomic operation
+Atomic operation
 
 **Why:** The increment is a read-modify-write operation, so an atomic operation prevents lost updates without using a mutex.
 
@@ -127,7 +127,7 @@ void worker(void *p) {
 
 ### 3. A pool of 4 DMA buffers; producer borrows, consumer returns
 
-**Primitive:** Counting semaphore
+Counting semaphore
 
 **Why:** The semaphore count represents the number of available buffers. Taking one borrows a buffer, and giving one returns it.
 
@@ -135,7 +135,7 @@ void worker(void *p) {
 
 ### 4. Wait for all 3 sensor tasks to finish their first read before starting fusion
 
-**Primitive:** Event group
+Event group
 
 **Why:** Each sensor task sets its own event bit, and the fusion task waits until all bits are set.
 
@@ -143,7 +143,7 @@ void worker(void *p) {
 
 ### 5. A long-running task should be killable from another task
 
-**Primitive:** Direct task notification
+Direct task notification
 
 **Why:** Another task can send a notification telling the worker to exit cleanly and delete itself.
 
