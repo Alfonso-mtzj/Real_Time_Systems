@@ -514,13 +514,3 @@ ChatGPT was used to help organize the README and explain the priority-inversion 
 Chat used: OpenAI ChatGPT, accessed July 2026.
 
 ---
-
-# Final Submission State
-
-The final submitted version:
-
-- Uses the binary semaphore for ISR-to-task signaling
-- Uses a counting semaphore with three maintenance-bay tokens
-- Uses a mutex around the shared inspection counter
-- Restores all synchronization after the induced-failure experiment
-- Uses the selected `USE_PI_MUTEX` setting required for the final demonstration
