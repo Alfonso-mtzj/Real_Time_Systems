@@ -25,6 +25,67 @@ All output is displayed through the Wokwi serial monitor.
 
 ---
 
+## Concurrency Diagram
+
+```text
+                        GPIO 18 Button
+                              |
+                              v
+                     +------------------+
+                     |   Button ISR     |
+                     +------------------+
+                              |
+                 xSemaphoreGiveFromISR()
+                              |
+                              v
+                     +------------------+
+                     | Binary Semaphore |
+                     +------------------+
+                              |
+                              v
+                 +-------------------------+
+                 | Emergency Responder Task|
+                 +-------------------------+
+
+
+     +------------------ Counting Semaphore ------------------+
+     |                 3 Maintenance Bay Tokens               |
+     +--------------------------------------------------------+
+              |              |              |
+              v              v              v
+     Inspection Team 1  Inspection Team 2  Inspection Team 3
+              ^
+              |
+     Inspection Team 4 waits until a token is released
+
+
+     Safety Station Task 1             Safety Station Task 2
+               |                                  |
+               +--------------+-------------------+
+                              |
+                              v
+                         +---------+
+                         |  Mutex  |
+                         +---------+
+                              |
+                              v
+                    Shared Inspection Counter
+
+
+                 Priority-Inversion Demonstration
+
+        Low Task L -------- owns lock --------+
+                                               |
+        High Task H ------- waits for lock ----+
+                                               |
+        Medium Task M -- CPU work/preempts L when
+                         binary semaphore is used
+
+        Mutex: priority inheritance enabled
+        Binary semaphore: priority inheritance disabled
+
+```
+
 ## Theme Refactor
 
 The original scaffold was changed to use a theme park control system.
