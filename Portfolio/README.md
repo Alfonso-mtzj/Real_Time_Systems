@@ -3,6 +3,11 @@
 **Final Portfolio Project**  
 **Real-Time Systems – Summer 2026**
 
+**Student:** Alfonso Martinez  
+**Platform:** ESP32-S3  
+**Language:** C  
+**Operating System:** FreeRTOS
+
 ---
 
 # Wokwi Simulation
@@ -199,6 +204,8 @@ The responder measures notification latency while the semaphore task measures se
 | Consumer WCET | ~186 µs |
 | Coordinator WCET | ~81 µs |
 | Responder WCET | ~1300 µs |
+
+During testing, Direct Task Notifications consistently produced lower wake-up latency than Binary Semaphores, making them the preferred choice for ISR-to-task signaling in this application.
 
 ---
 
