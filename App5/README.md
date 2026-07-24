@@ -80,7 +80,7 @@ The responder receives direct task notifications from:
 - The coordinator after a completed ride cycle.
 - The emergency button ISR.
 
-Direct task notifications are lightweight and provide fast one-to-one signaling.
+I used direct task notifications because they are a faster way to wake up one specific task than using a binary semaphore.
 
 ---
 
@@ -121,7 +121,7 @@ An Event Group was chosen because the coordinator must wait until multiple event
 
 Using separate semaphores would require more synchronization logic and additional code.
 
-Event Groups provide a cleaner and more efficient solution for this type of synchronization.
+I chose an Event Group because I needed to wait for both events before moving on. It was easier than trying to manage multiple semaphores.
 
 ---
 
@@ -151,8 +151,7 @@ The direct task notification consistently woke the responder faster than the bin
 
 The web server and monitor run on Core 0 so networking and logging do not interfere with the real-time tasks running on Core 1.
 
-If the web server were placed on Core 1, handling HTTP requests and Wi-Fi traffic could delay the producer, consumer, or emergency responder tasks. Separating the monitor onto Core 0 helps keep the real-time pipeline predictable.
-
+If the web server were placed on Core 1, handling HTTP requests and Wi-Fi traffic could delay the producer, consumer, or emergency responder tasks. Keeping the monitor on Core 0 lets the real-time tasks on Core 1 run without getting slowed down by the web server or logging.
 ---
 
 # Concurrency Diagram
