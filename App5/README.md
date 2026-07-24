@@ -198,6 +198,4 @@ If the web server were placed on Core 1, handling HTTP requests and Wi-Fi traffi
 
 # AI Usage
 
-# AI Usage
-
 The starter scaffold provided for App 5 was used as the base for this project. I also reused parts of my App 1 web server and App 3 latency measurement code as suggested in the assignment. The ThemePark pipeline, queue logic, synchronization, and testing were completed for this application.
