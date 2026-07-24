@@ -43,6 +43,40 @@ The project demonstrates multiple FreeRTOS synchronization primitives working to
 
 # System Architecture
 
+
+                Core 1 (Real-Time)
+
+        Ride Sensor Task
+               │
+               ▼
+             Queue
+               │
+               ▼
+      Safety Controller
+               │
+               ▼
+          Event Group
+               │
+               ▼
+      Ride Coordinator
+               │
+     Direct Task Notification
+               │
+               ▼
+     Emergency Responder
+
+Button ISR ───────┘
+        │
+        └────► Binary Semaphore (Latency Comparison)
+
+
+               Core 0
+
+      Serial Monitor
+      Web Dashboard (optional)
+      Heartbeat Watchdog
+
+      
 ## Core 1 (Real-Time Tasks)
 
 - Ride Sensor Task
