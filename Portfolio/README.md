@@ -43,7 +43,7 @@ The project demonstrates multiple FreeRTOS synchronization primitives working to
 
 # System Architecture
 
-
+```text
                 Core 1 (Real-Time)
 
         Ride Sensor Task
@@ -69,13 +69,12 @@ Button ISR ───────┘
         │
         └────► Binary Semaphore (Latency Comparison)
 
-
                Core 0
 
       Serial Monitor
       Web Dashboard (optional)
       Heartbeat Watchdog
-
+```
       
 ## Core 1 (Real-Time Tasks)
 
